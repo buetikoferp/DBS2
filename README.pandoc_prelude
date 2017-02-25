@@ -1,0 +1,12 @@
+---
+title: Datenbanksysteme 2, FS2017
+author: Prof. Hansjörg Huser, Marcel Huber
+date: 2017-02-20
+lang: german
+papersize: a4paper
+#fontsize: 10pt
+#margin: 0.8in
+classoption: oneside, parskip
+documentclass: scrartcl
+...
+
