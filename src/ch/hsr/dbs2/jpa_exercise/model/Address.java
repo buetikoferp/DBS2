@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class Address {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long addressid;
 	public String street;
 	public int zip;
@@ -66,7 +67,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "\t" + "TODO";
+		return this.getClass().getSimpleName() + "\t" + city + "\t" + zip + "\t" + street;
 	}
 	
 	public long getId() {

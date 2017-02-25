@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class BankManager {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long managerid;
 	public String name;
 	
@@ -47,7 +48,7 @@ public class BankManager {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "\t" + "TODO";
+		return this.getClass().getSimpleName() + "\t" + name + "\t";
 	}
 	
 	public long getId() {

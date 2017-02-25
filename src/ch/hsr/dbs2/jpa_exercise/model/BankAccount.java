@@ -11,6 +11,7 @@ import javax.persistence.*;
 public class BankAccount {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long accountid;
 	public double balance;
 	
@@ -49,7 +50,7 @@ public class BankAccount {
 
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "\t" + "TODO";
+		return this.getClass().getSimpleName() + "\t" + customer.name + "\t" + balance;
 	}
 	
 	public long getId() {

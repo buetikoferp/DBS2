@@ -1,6 +1,7 @@
 package ch.hsr.dbs2.jpa_exercise.main;
 
 import java.sql.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import ch.hsr.dbs2.jpa_exercise.model.Address;
 import ch.hsr.dbs2.jpa_exercise.model.BankAccount;
 import ch.hsr.dbs2.jpa_exercise.model.BankCustomer;
 import ch.hsr.dbs2.jpa_exercise.model.BankManager;
+import ch.hsr.dbs2.jpa_exercise.model.Currency;
 
 public class TheBank {
 
@@ -21,24 +23,29 @@ public class TheBank {
 		factory = Persistence.createEntityManagerFactory("Bank");
 		EntityManager em = factory.createEntityManager();
 		try {
+			openAccount("Philipp", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
+			openAccount("Anthony", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
+			transfer(101, 102, 100);
 			printAddresses(em);
 			printBankAccounts(em);
 			printBankCustomers(em);
 			printBankManagers(em);
+			
 		} finally {
 			em.close();
 		}
 	}
 	
-	private void transfer(BankAccount from, BankAccount to, double balance){
+	private static void transfer(long fromId, long toId, double balance){
 		EntityManager em = factory.createEntityManager();
 		try{
 			em.getTransaction().begin();
-			from = em.find(BankAccount.class, from.getId());
-			to = em.find(BankAccount.class, to.getId());
+			BankAccount from = em.find(BankAccount.class, fromId);
+			BankAccount to = em.find(BankAccount.class, toId);
 			from.balance -= balance;
 			to.balance += balance;
 			em.getTransaction().commit();
+			System.out.println("Transaction from:" + from.customer.name + " to: " + to.customer.name + " is done");
 			
 		}catch(Exception e){
 			em.getTransaction().rollback();
@@ -47,7 +54,7 @@ public class TheBank {
 		}
 	}
 	
-	private void closeAccount(BankAccount close){
+	private static void closeAccount(BankAccount close){
 		EntityManager em = factory.createEntityManager();
 		try{
 			em.getTransaction().begin();
@@ -61,21 +68,22 @@ public class TheBank {
 		}
 	}
 	
-	private void openAccount(String name, Date birthDate){
+	private static void openAccount(String name, Date birthDate){
 		EntityManager em = factory.createEntityManager();
 		try{
-			BankCustomer bc = new BankCustomer();
-			bc.setName(name);
-			bc.setBirthDate(birthDate);
+			em.getTransaction().begin();
+			BankCustomer customer = new BankCustomer();
+			customer.setName(name);
+			customer.setBirthDate(birthDate);
 			
 			BankAccount ba = new BankAccount();
-			ba.setBalance(0);
-			bc.getAccounts().add(ba);
+			ba.setBalance(200);
+			ba.setCurrency(Currency.CHF);
+			ba.setCustomer(customer);
+			customer.getAccounts().add(ba);
 			em.persist(ba);
-			em.persist(bc);
+			em.persist(customer);
 			em.getTransaction().commit();
-		}catch(Exception e){
-			em.getTransaction().rollback();
 		}finally{
 			em.close();
 		}

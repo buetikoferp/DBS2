@@ -26,11 +26,10 @@ public class BankCustomer {
 	public Address address;
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long customerid;
 	public String name;
 	public Date birthDate;
-	public BankManager manager;
-
 	
 	public Address getAddress() {
 		return address;
@@ -82,16 +81,8 @@ public class BankCustomer {
 		this.birthDate = birthDate;
 	}
 
-	public BankManager getManager() {
-		return manager;
-	}
-
-	public void setManager(BankManager manager) {
-		this.manager = manager;
-	}
-
 	@Override
 	public String toString() {
-		return this.getClass().getSimpleName() + "\t" + "TODO";
+		return this.getClass().getSimpleName() + "\t" + customerid + "\t" + name;
 	}
 }
