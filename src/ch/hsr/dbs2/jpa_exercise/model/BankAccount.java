@@ -13,7 +13,12 @@ public class BankAccount {
 	@Id
 	private long accountid;
 	public double balance;
+	
+	@Enumerated(EnumType.STRING)
 	public Currency currency;
+	
+	@OneToOne
+	@JoinColumn(name = "Account_CustomerId")
 	public BankCustomer customer;
 	
 	public BankAccount(){}

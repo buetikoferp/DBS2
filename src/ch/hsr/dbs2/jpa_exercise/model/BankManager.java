@@ -18,13 +18,13 @@ public class BankManager {
 	public String name;
 	
 	@ManyToMany
-	@JoinTable(name = "customer_manager",
-	joinColumns = {@JoinColumn(name = "managerref")},
-	inverseJoinColumns = {@JoinColumn(name = "customerref")})
+	@JoinTable(name = "CustomerManager",
+	joinColumns = {@JoinColumn(name = "ManagerId")},
+	inverseJoinColumns = {@JoinColumn(name = "CustomerId")})
 	private Collection<BankCustomer> customers = new ArrayList<>();
 	
 	@OneToOne(optional = true)
-	@JoinColumn(name = "addressref")
+	@JoinColumn(name = "Manager_AddressId")
 	public Address address;
 	
 	public BankManager(){}

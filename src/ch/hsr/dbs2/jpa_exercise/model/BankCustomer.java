@@ -1,5 +1,6 @@
 package ch.hsr.dbs2.jpa_exercise.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -17,17 +18,17 @@ public class BankCustomer {
 	private Collection<BankManager> managers = new ArrayList<>();
 	
 	@OneToMany
-	@JoinColumn(name ="customerref", referencedColumnName = "customerid")
+	@JoinColumn(name ="Account_CustomerId", referencedColumnName = "customerid")
 	private Collection<BankAccount> accounts = new ArrayList<>();
 	
 	@OneToOne(optional = true)
-	@JoinColumn(name = "addressref")
+	@JoinColumn(name = "Customer_AddressId")
 	public Address address;
 	
 	@Id
 	private long customerid;
 	public String name;
-	public String birthDate;
+	public Date birthDate;
 	public BankManager manager;
 
 	
@@ -73,11 +74,11 @@ public class BankCustomer {
 		this.name = name;
 	}
 
-	public String getBirthDate() {
+	public Date getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(String birthDate) {
+	public void setBirthDate(Date birthDate) {
 		this.birthDate = birthDate;
 	}
 

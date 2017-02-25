@@ -11,11 +11,15 @@ import javax.persistence.*;
 public class Address {
 	
 	@Id
-	private long id;
+	private long addressid;
 	public String street;
 	public int zip;
 	public String city;
+	
+	@OneToOne(mappedBy = "address")
 	public BankManager manager;
+	
+	@OneToOne(mappedBy = "address")
 	public BankCustomer customer;
 	
 	public Address(){}
@@ -66,11 +70,11 @@ public class Address {
 	}
 	
 	public long getId() {
-		return id;
+		return addressid;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this.addressid = id;
 	}
 
 

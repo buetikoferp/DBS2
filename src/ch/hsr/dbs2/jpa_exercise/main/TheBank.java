@@ -1,5 +1,6 @@
 package ch.hsr.dbs2.jpa_exercise.main;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.*;
@@ -60,7 +61,7 @@ public class TheBank {
 		}
 	}
 	
-	private void openAccount(String name, String birthDate){
+	private void openAccount(String name, Date birthDate){
 		EntityManager em = factory.createEntityManager();
 		try{
 			BankCustomer bc = new BankCustomer();
