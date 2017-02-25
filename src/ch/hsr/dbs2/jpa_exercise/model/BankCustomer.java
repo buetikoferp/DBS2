@@ -45,6 +45,30 @@ public class BankCustomer {
 		return name;
 	}
 
+	public Collection<BankManager> getManagers() {
+		return managers;
+	}
+
+	public void setManagers(Collection<BankManager> managers) {
+		this.managers = managers;
+	}
+
+	public Collection<BankAccount> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(Collection<BankAccount> accounts) {
+		this.accounts = accounts;
+	}
+
+	public long getCustomerid() {
+		return customerid;
+	}
+
+	public void setCustomerid(long customerid) {
+		this.customerid = customerid;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -69,14 +93,4 @@ public class BankCustomer {
 	public String toString() {
 		return this.getClass().getSimpleName() + "\t" + "TODO";
 	}
-	
-	public long getId() {
-		return customerid;
-	}
-
-	public void setId(long id) {
-		this.customerid = id;
-	}
-
-
 }

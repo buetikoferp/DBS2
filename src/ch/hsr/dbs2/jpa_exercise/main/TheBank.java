@@ -28,6 +28,57 @@ public class TheBank {
 			em.close();
 		}
 	}
+	
+	private void transfer(BankAccount from, BankAccount to, double balance){
+		EntityManager em = factory.createEntityManager();
+		try{
+			em.getTransaction().begin();
+			from = em.find(BankAccount.class, from.getId());
+			to = em.find(BankAccount.class, to.getId());
+			from.balance -= balance;
+			to.balance += balance;
+			em.getTransaction().commit();
+			
+		}catch(Exception e){
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
+	
+	private void closeAccount(BankAccount close){
+		EntityManager em = factory.createEntityManager();
+		try{
+			em.getTransaction().begin();
+			close = em.find(BankAccount.class, 1L);
+			em.remove(close);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
+	
+	private void openAccount(String name, String birthDate){
+		EntityManager em = factory.createEntityManager();
+		try{
+			BankCustomer bc = new BankCustomer();
+			bc.setName(name);
+			bc.setBirthDate(birthDate);
+			
+			BankAccount ba = new BankAccount();
+			ba.setBalance(0);
+			bc.getAccounts().add(ba);
+			em.persist(ba);
+			em.persist(bc);
+			em.getTransaction().commit();
+		}catch(Exception e){
+			em.getTransaction().rollback();
+		}finally{
+			em.close();
+		}
+	}
 
 	private static void printAddresses(EntityManager em) {
 		Query query = em.createQuery("select a from Address a");

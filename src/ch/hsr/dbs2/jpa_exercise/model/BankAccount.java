@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class BankAccount {
 	
 	@Id
-	private long id;
+	private long accountid;
 	public double balance;
 	public Currency currency;
 	public BankCustomer customer;
@@ -48,11 +48,11 @@ public class BankAccount {
 	}
 	
 	public long getId() {
-		return id;
+		return accountid;
 	}
 
 	public void setId(long id) {
-		this.id = id;
+		this.accountid = id;
 	}
 
 }
