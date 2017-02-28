@@ -16,6 +16,7 @@ public class TheBank {
 
 	private static EntityManagerFactory factory;
 
+	//Uebung 01
 	/**
 	 * @param args
 	 */
@@ -23,14 +24,18 @@ public class TheBank {
 		factory = Persistence.createEntityManagerFactory("Bank");
 		EntityManager em = factory.createEntityManager();
 		try {
+			
+			// Uebung 01
 			openAccount("Philipp", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
 			openAccount("Anthony", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
-			transfer(101, 102, 100);
-			printAddresses(em);
-			printBankAccounts(em);
-			printBankCustomers(em);
-			printBankManagers(em);
+//			transfer(101, 102, 100);
+//			printAddresses(em);
+//			printBankAccounts(em);
+//			printBankCustomers(em);
+//			printBankManagers(em);
 			
+			//Uebung 02
+			testBidirectionalRelations();
 		} finally {
 			em.close();
 		}
@@ -84,6 +89,39 @@ public class TheBank {
 			em.persist(ba);
 			em.persist(customer);
 			em.getTransaction().commit();
+		}finally{
+			em.close();
+		}
+	}
+	
+	//Uebung 02
+	
+	public static void testBidirectionalRelations(){
+		EntityManager em = factory.createEntityManager();
+		
+		try{
+			
+			em.getTransaction().begin();
+			BankCustomer b1 = em.find(BankCustomer.class, 1L);
+			BankManager newManager = new BankManager();
+			newManager.setName("Adrian Fröhlich");
+			b1.addManager(newManager);
+			
+			if(newManager.getCustomers().contains(b1)){
+				System.out.println("Bidirektionale Realtion synchronisiert korrekt");
+			}else{
+				System.out.println("Unsynchronisierter Zustand");
+			}
+			
+			em.persist(newManager);
+			em.persist(b1);
+			em.getTransaction().commit();
+			
+			printBankCustomers(em);
+			printBankManagers(em);
+			
+		}catch(Exception e){
+			em.getTransaction().rollback();
 		}finally{
 			em.close();
 		}

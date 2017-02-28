@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Entity
 public class BankCustomer {
 	
-	@ManyToMany(mappedBy = "customers")
+	@ManyToMany(mappedBy = "customers", fetch = FetchType.EAGER)
 	private Collection<BankManager> managers = new ArrayList<>();
 	
 	@OneToMany
@@ -30,6 +30,20 @@ public class BankCustomer {
 	private long customerid;
 	public String name;
 	public Date birthDate;
+	
+	public void addManager(BankManager m){
+		managers.add(m);
+		if(!m.getCustomers().contains(this)){
+			m.getCustomers().add(this);
+		}
+	}
+	
+	public void removeManager(BankManager m){
+		managers.remove(m);
+		if(m.getCustomers().contains(this)){
+			m.getCustomers().remove(this);
+		}
+	}
 	
 	public Address getAddress() {
 		return address;

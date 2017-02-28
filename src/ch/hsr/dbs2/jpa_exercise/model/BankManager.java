@@ -16,6 +16,22 @@ public class BankManager {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long managerid;
+	public long getManagerid() {
+		return managerid;
+	}
+
+	public void setManagerid(long managerid) {
+		this.managerid = managerid;
+	}
+
+	public Collection<BankCustomer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(Collection<BankCustomer> customers) {
+		this.customers = customers;
+	}
+
 	public String name;
 	
 	@ManyToMany
