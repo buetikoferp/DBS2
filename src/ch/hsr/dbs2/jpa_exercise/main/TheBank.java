@@ -11,12 +11,14 @@ import ch.hsr.dbs2.jpa_exercise.model.BankAccount;
 import ch.hsr.dbs2.jpa_exercise.model.BankCustomer;
 import ch.hsr.dbs2.jpa_exercise.model.BankManager;
 import ch.hsr.dbs2.jpa_exercise.model.Currency;
+import ch.hsr.dbs2.jpa_exercise.model.PrivateBankCustomer;
+import ch.hsr.dbs2.jpa_exercise.model.RetailBankCustomer;
 
 public class TheBank {
 
 	private static EntityManagerFactory factory;
 
-	//Uebung 01
+	// Uebung 01
 	/**
 	 * @param args
 	 */
@@ -24,26 +26,29 @@ public class TheBank {
 		factory = Persistence.createEntityManagerFactory("Bank");
 		EntityManager em = factory.createEntityManager();
 		try {
-			
+
 			// Uebung 01
-			openAccount("Philipp", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
-			openAccount("Anthony", new Date(new GregorianCalendar(1992,12-1,12).getTimeInMillis()));
-//			transfer(101, 102, 100);
-//			printAddresses(em);
-//			printBankAccounts(em);
-//			printBankCustomers(em);
-//			printBankManagers(em);
+			//openAccount("Philipp", new Date(new GregorianCalendar(1992, 12 - 1, 12).getTimeInMillis()));
+			//openAccount("Anthony", new Date(new GregorianCalendar(1992, 12 - 1, 12).getTimeInMillis()));
+			// transfer(101, 102, 100);
+			// printAddresses(em);
+			// printBankAccounts(em);
+			// printBankCustomers(em);
+			// printBankManagers(em);
+
+			// Uebung 02
+			//testBidirectionalRelations();
+			createNewBankCustomers();
+			printBankCustomers(em);
 			
-			//Uebung 02
-			testBidirectionalRelations();
 		} finally {
 			em.close();
 		}
 	}
-	
-	private static void transfer(long fromId, long toId, double balance){
+
+	private static void transfer(long fromId, long toId, double balance) {
 		EntityManager em = factory.createEntityManager();
-		try{
+		try {
 			em.getTransaction().begin();
 			BankAccount from = em.find(BankAccount.class, fromId);
 			BankAccount to = em.find(BankAccount.class, toId);
@@ -51,36 +56,36 @@ public class TheBank {
 			to.balance += balance;
 			em.getTransaction().commit();
 			System.out.println("Transaction from:" + from.customer.name + " to: " + to.customer.name + " is done");
-			
-		}catch(Exception e){
+
+		} catch (Exception e) {
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
 			em.close();
 		}
 	}
-	
-	private static void closeAccount(BankAccount close){
+
+	private static void closeAccount(BankAccount close) {
 		EntityManager em = factory.createEntityManager();
-		try{
+		try {
 			em.getTransaction().begin();
 			close = em.find(BankAccount.class, 1L);
 			em.remove(close);
 			em.getTransaction().commit();
-		}catch(Exception e){
+		} catch (Exception e) {
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
 			em.close();
 		}
 	}
-	
-	private static void openAccount(String name, Date birthDate){
+
+	private static void openAccount(String name, Date birthDate) {
 		EntityManager em = factory.createEntityManager();
-		try{
+		try {
 			em.getTransaction().begin();
 			BankCustomer customer = new BankCustomer();
 			customer.setName(name);
 			customer.setBirthDate(birthDate);
-			
+
 			BankAccount ba = new BankAccount();
 			ba.setBalance(200);
 			ba.setCurrency(Currency.CHF);
@@ -89,40 +94,66 @@ public class TheBank {
 			em.persist(ba);
 			em.persist(customer);
 			em.getTransaction().commit();
-		}finally{
+		} finally {
 			em.close();
 		}
 	}
-	
-	//Uebung 02
-	
-	public static void testBidirectionalRelations(){
+
+	// Uebung 02
+
+	// Aufgabe 01
+	public static void testBidirectionalRelations() {
 		EntityManager em = factory.createEntityManager();
-		
-		try{
-			
+
+		try {
+
 			em.getTransaction().begin();
 			BankCustomer b1 = em.find(BankCustomer.class, 1L);
 			BankManager newManager = new BankManager();
 			newManager.setName("Adrian Fröhlich");
 			b1.addManager(newManager);
-			
-			if(newManager.getCustomers().contains(b1)){
+
+			if (newManager.getCustomers().contains(b1)) {
 				System.out.println("Bidirektionale Realtion synchronisiert korrekt");
-			}else{
+			} else {
 				System.out.println("Unsynchronisierter Zustand");
 			}
-			
+
 			em.persist(newManager);
 			em.persist(b1);
-			em.getTransaction().commit();
 			
 			printBankCustomers(em);
 			printBankManagers(em);
-			
-		}catch(Exception e){
+			em.getTransaction().commit();
+
+
+
+		} catch (Exception e) {
 			em.getTransaction().rollback();
-		}finally{
+		} finally {
+			em.close();
+		}
+	}
+
+	// Aufgabe 02
+	public static void createNewBankCustomers() {
+		EntityManager em = factory.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			RetailBankCustomer r = new RetailBankCustomer();
+			r.setName("Max Powers");
+			r.setAnnualFees(200.50);
+			em.persist(r);
+			
+			PrivateBankCustomer p = new PrivateBankCustomer();
+			p.setName("Rüdiger Ümmel");
+			p.setBonusProgrammId(42);
+			em.persist(p);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			em.getTransaction().rollback();
+		} finally {
 			em.close();
 		}
 	}
