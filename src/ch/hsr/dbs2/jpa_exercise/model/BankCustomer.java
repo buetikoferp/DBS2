@@ -12,6 +12,8 @@ import javax.persistence.*;
  */
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class BankCustomer {
 	
 	@ManyToMany(mappedBy = "customers", fetch = FetchType.EAGER)
@@ -27,7 +29,7 @@ public class BankCustomer {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long customerid;
+	public long customerid;
 	public String name;
 	public Date birthDate;
 	
